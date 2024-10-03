@@ -222,10 +222,10 @@ function updatePos(idx, offset, prevPos) {
 				setTimeout(() => {
 					// window.scrollTo(0, document.body.scrollTop - (d - t));
 					// window.scrollTo(0, ROOT.scrollTop - (d - t));
-					window.scrollTo({
-						top: document.documentElement.scrollTop - (d - t),
-						behavior: 'smooth',
-					});
+					// window.scrollTo({
+					// 	top: document.documentElement.scrollTop - (d - t),
+					// 	behavior: 'smooth',
+					// });
 					window.scrollTo(0, document.documentElement.scrollTop - (d - t), {
 						behavior: 'smooth',
 					});
@@ -343,13 +343,13 @@ window.addEventListener('load', () => {
 	trumpObserver.observe(trumps[1]);
 
 	setTimeout(() => {
-		window.scrollTo({
-			top: document.body.scrollHeight,
-			behavior: 'smooth',
-		});
+		// window.scrollTo({
+		// 	top: document.body.scrollHeight,
+		// 	behavior: 'smooth',
+		// });
 		window.scrollTo(0, document.body.scrollHeight);
-		window.scrollTo(0, document.documentElement.scrollHeight);
-		window.scrollTo(0, ROOT.scrollHeight);
+		// window.scrollTo(0, document.documentElement.scrollHeight);
+		// window.scrollTo(0, ROOT.scrollHeight);
 	});
 
 	bgMusic = new Audio('hail_to_the_chief.mp3');
@@ -390,10 +390,11 @@ function gameOver() {
 	tryMoveY = clamp(0, bounds.bottom - trumpDims[1]);
 	inMenu = true;
 	MENU.classList.add('active');
-	window.scrollTo({
-		top: document.body.scrollHeight,
-		behavior: 'smooth',
-	});
+	// window.scrollTo({
+	// 	top: document.body.scrollHeight,
+	// 	behavior: 'smooth',
+	// });
+	window.scrollTo(0, document.body.scrollHeight);
 }
 
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -403,6 +404,9 @@ function disableIOSTextFieldZoom() {
 	const element = document.querySelector('meta[name=viewport]');
 	let content = element.getAttribute('content');
 
-	element.setAttribute('content', content + ', maximum-scale=1.0');
+	element.setAttribute(
+		'content',
+		content + ', maximum-scale=1.0, user-scalable=no'
+	);
 }
 disableIOSTextFieldZoom();
