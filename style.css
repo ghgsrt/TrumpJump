@@ -1,7 +1,11 @@
 :root {
-	--min-width: min(100%, 600px);
+	--min-width: calc(100dvh * 9 / 16);
 
-	font-size: calc(var(--min-width) / 1.25);
+	font-size: calc(var(--min-width) / 40);
+}
+
+* {
+	user-select: none;
 }
 
 html {
@@ -120,7 +124,7 @@ button:hover {
 	width: 2.8rem;
 	height: 7rem;
 	bottom: 0;
-	left: 0.4rem;
+	left: 0;
 	/* background: url(trump-stick-guy.png); */
 	/* background-size: contain;
 	background-repeat: no-repeat; */

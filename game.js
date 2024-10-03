@@ -27,11 +27,9 @@ const trumpObserver = new IntersectionObserver(
 		if (!entries[intersectingEntry].isIntersecting) {
 			// console.log(entries[intersectingEntry].target.offsetLeft, bounds.width);
 			if (entries[intersectingEntry].target.offsetLeft < bounds.left) {
-				console.log('1');
 				trumps = [trumps[2], trumps[0], trumps[1]];
 				pos[intersectingEntry] += bounds.width;
 			} else if (entries[intersectingEntry].target.offsetLeft > bounds.width) {
-				console.log('2');
 				trumps = [trumps[1], trumps[2], trumps[0]];
 				pos[0] -= bounds.width;
 			}
@@ -79,7 +77,6 @@ const platformObserver = new IntersectionObserver(
 					]);
 				}
 			} else if (!entry.isIntersecting) {
-				console.log('removeing');
 				platformInfo.splice(
 					platformInfo.findIndex((info) => info[0] === entry.target),
 					1
@@ -105,7 +102,7 @@ const platformBounds = {
 	bottom: 0,
 	top: bounds.height - platformDims[1] ?? 0,
 };
-console.log(bounds);
+
 const platformBoundX = clamp(platformBounds.left, platformBounds.right);
 const platformBoundY = clamp(platformBounds.bottom, platformBounds.top);
 
@@ -162,14 +159,10 @@ function detectBottomCollisionOrPassthrough(
 	rectSize
 ) {
 	const rectTop = rectPos[1] + rectSize[1];
-	if (idx === 1) console.log(prevPos[1], newPos[1], rectTop);
-	if (idx === 1) console.log(newPos[1] >= rectTop);
-	if (idx === 1) console.log(prevPos[1] < rectTop);
 
 	if (newPos[1] >= rectTop || prevPos[1] < rectTop) {
 		return false;
 	}
-	if (idx === 1) console.log('bboobies');
 	const boxLeftX = Math.min(prevPos[0], newPos[0]);
 	const boxRightX = Math.max(prevPos[0] + boxSize[0], newPos[0] + boxSize[0]);
 	const rectLeftX = rectPos[0];
@@ -178,7 +171,6 @@ function detectBottomCollisionOrPassthrough(
 	if (boxRightX <= rectLeftX || boxLeftX >= rectRightX) {
 		return false;
 	}
-	if (idx === 1) console.log('hfodgk');
 
 	return (
 		newPos[1] < rectTop &&
@@ -197,7 +189,7 @@ const BASE_JUMP_HEIGHT = 5.5;
 const MAX_VELOCITY_X = 5;
 const MAX_VELOCITY_Y = 15;
 
-const pos = [0, 0];
+const pos = [bounds.width / 2 - trumpDims[0] / 2, 0];
 const velocity = [0, 0];
 const acceleration = [0, GRAVITY];
 
@@ -230,7 +222,6 @@ function updatePos(idx, offset, prevPos) {
 				platformPos,
 				platformDims
 			);
-			// if (idx === 1) console.log('boobs', [pos[0] - offset, pos[1]]);
 			if (collision) {
 				jump(true);
 				if (!inMenu) {
