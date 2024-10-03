@@ -8,7 +8,10 @@ let trumps = [document.getElementById('trump')];
 const PLAY = document.getElementById('play');
 const MENU = document.getElementById('menu');
 
-PLAY.onclick = startGame;
+PLAY.onclick = () => {
+	PLAY.blur();
+	startGame();
+};
 
 let initial = true;
 let initial2 = true;
@@ -224,7 +227,7 @@ function updatePos(idx, offset, prevPos) {
 					platformObserver.unobserve(platform);
 					platformInfo.splice(i, 1);
 					platform.classList.add('broken');
-					setTimeout(platform.remove, 500);
+					// setTimeout(platform.remove, 500);
 				}
 				break;
 			}
@@ -352,7 +355,7 @@ function render() {
 }
 
 let bgMusic;
-
+let eatingDogs;
 const oofSounds = [];
 
 window.addEventListener('load', () => {
@@ -373,6 +376,7 @@ window.addEventListener('load', () => {
 	});
 
 	bgMusic = new Audio('hail_to_the_chief.mp3');
+	eatingDogs = new Audio('eating-dogs-short.mp3');
 	oofSounds.push(
 		new Audio('aeah-audio.mp3'),
 		new Audio('ahh-converted.mp3'),
@@ -384,9 +388,12 @@ window.addEventListener('load', () => {
 	render();
 });
 
-function resetGame() {}
+function resetGame() {
+	for (const platform of platforms) platform.classList.remove('broken');
+}
 
 function startGame() {
+	eatingDogs.play();
 	bgMusic.play();
 
 	tryMoveY = clamp(0, bounds.height - trumpDims[1]);
@@ -395,10 +402,11 @@ function startGame() {
 }
 
 function gameOver() {
+	resetGame();
+
 	bgMusic.pause();
 	bgMusic.currentTime = 0;
 
-	PLAY.blur();
 	tryMoveY = clamp(0, bounds.bottom - trumpDims[1]);
 	inMenu = true;
 	MENU.classList.add('active');
