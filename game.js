@@ -3,10 +3,12 @@ const random = (min, max) => Math.random() * (max - min) + min;
 
 let inMenu = true;
 
+const ROOT = document.getElementById('root');
 const SPACE = document.getElementById('space');
-let trumps = [document.getElementById('trump')];
 const PLAY = document.getElementById('play');
 const MENU = document.getElementById('menu');
+
+let trumps = [document.getElementById('trump')];
 
 PLAY.onclick = () => {
 	PLAY.blur();
@@ -217,11 +219,14 @@ function updatePos(idx, offset, prevPos) {
 			const d = document.documentElement.clientHeight / 2;
 
 			if (velocity[1] > 0 && t < d) {
-				setTimeout(() =>
+				setTimeout(() => {
+					// window.scrollTo(0, document.body.scrollTop - (d - t));
+					// window.scrollTo(0, ROOT.scrollTop - (d - t));
 					window.scrollTo({
 						top: document.documentElement.scrollTop - (d - t),
-					})
-				);
+					});
+					window.scrollTo(0, document.documentElement.scrollTop - (d - t));
+				});
 			} else if (rect.top > document.documentElement.clientHeight) gameOver();
 		}
 		if (pos[1] === 0) isOnGround = true;
@@ -338,6 +343,9 @@ window.addEventListener('load', () => {
 		window.scrollTo({
 			top: document.body.scrollHeight,
 		});
+		window.scrollTo(0, document.body.scrollHeight);
+		window.scrollTo(0, document.documentElement.scrollHeight);
+		window.scrollTo(0, ROOT.scrollHeight);
 	});
 
 	bgMusic = new Audio('hail_to_the_chief.mp3');
