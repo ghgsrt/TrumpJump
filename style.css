@@ -43,6 +43,7 @@ button {
 	border-radius: 1rem;
 	padding: 0.25rem 2rem;
 	transition: color 75ms ease-in-out, transform 75ms ease-in-out;
+	pointer-events: all !important;
 }
 button:focus {
 	outline: none;
@@ -92,6 +93,7 @@ button:hover {
 	align-items: center;
 	opacity: 0;
 	transition: opacity 500ms ease-in-out;
+	pointer-events: none;
 }
 #menu.active {
 	opacity: 1;

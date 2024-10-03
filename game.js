@@ -296,28 +296,28 @@ const inputStack = [];
 
 const mobileLeft = document.getElementById('mobile-left');
 const mobileRight = document.getElementById('mobile-right');
-mobileLeft.addEventListener('touchstart', () => {
+mobileLeft.addEventListener('pointerdown', () => {
+	if (inputStack.includes('a')) return;
+
 	jump();
 
 	inputStack.push('a');
 	inputActions['a']();
 });
-mobileLeft.addEventListener('touchend', () => {
-	jump();
-
+mobileLeft.addEventListener('pointerup', () => {
 	inputStack.splice(inputStack.indexOf('a'), 1);
 	if (inputStack.length > 0) inputActions[inputStack[inputStack.length - 1]]();
 	else stopMoving();
 });
-mobileRight.addEventListener('touchstart', () => {
+mobileRight.addEventListener('pointerdown', () => {
+	if (inputStack.includes('d')) return;
+
 	jump();
 
 	inputStack.push('d');
 	inputActions['d']();
 });
-mobileRight.addEventListener('touchend', () => {
-	jump();
-
+mobileRight.addEventListener('pointerup', () => {
 	inputStack.splice(inputStack.indexOf('d'), 1);
 	if (inputStack.length > 0) inputActions[inputStack[inputStack.length - 1]]();
 	else stopMoving();
