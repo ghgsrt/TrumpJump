@@ -49,16 +49,16 @@ const trumpObserver = new IntersectionObserver(
 );
 trumpObserver.observe(trumps[0]);
 
-const deathObserver = new IntersectionObserver(
-	(entries) => {
-		if (!entries[0].isIntersecting) gameOver();
-	},
-	{
-		root: null,
-		threshold: 0,
-	}
-);
-deathObserver.observe(trumps[0]);
+// const deathObserver = new IntersectionObserver(
+// 	(entries) => {
+// 		if (!entries[0].isIntersecting) gameOver();
+// 	},
+// 	{
+// 		root: null,
+// 		threshold: 0,
+// 	}
+// );
+// deathObserver.observe(trumps[0]);
 
 const bounds = SPACE.getBoundingClientRect();
 
@@ -151,7 +151,6 @@ function detectCollisionOrPassthrough(
 }
 
 function detectBottomCollisionOrPassthrough(
-	idx,
 	prevPos,
 	newPos,
 	boxSize,
@@ -203,7 +202,6 @@ function updatePos(idx, offset, prevPos) {
 	offset ??= 0;
 	prevPos ??= [pos[0] - offset, pos[1]];
 	if (idx === 0) {
-		// console.log('uh')
 		pos[0] = tryMoveX(pos[0] + velocity[0]);
 		pos[1] = tryMoveY(pos[1] + velocity[1]);
 	}
@@ -213,9 +211,7 @@ function updatePos(idx, offset, prevPos) {
 	if (velocity[1] < 0)
 		for (let i = 0; i < platformInfo.length; i++) {
 			const [platform, platformPos] = platformInfo[i];
-			// console.log(idx, [pos[0] - offset, pos[1]])
 			const collision = detectBottomCollisionOrPassthrough(
-				idx,
 				prevPos,
 				[pos[0] - offset, pos[1]],
 				trumpDims,
@@ -239,18 +235,18 @@ function updatePos(idx, offset, prevPos) {
 			velocity[1] = 0;
 		}
 
-		if (!inMenu && velocity[1] > 0) {
+		if (!inMenu) {
 			const rect = trumps[idx].getBoundingClientRect();
 			const t = rect.top + trumpDims[1] / 2;
 			const d = document.documentElement.clientHeight / 2;
 
-			if (t < d) {
+			if (velocity[1] > 0 && t < d) {
 				setTimeout(() =>
 					window.scrollTo({
 						top: document.documentElement.scrollTop - (d - t),
 					})
 				);
-			}
+			} else if (rect.top > document.documentElement.clientHeight) gameOver();
 		}
 		if (pos[1] === 0) isOnGround = true;
 
