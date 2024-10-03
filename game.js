@@ -362,7 +362,10 @@ window.addEventListener('load', () => {
 });
 
 function resetGame() {
-	for (const platform of platforms) platform.classList.remove('broken');
+	for (const platform of platforms) {
+		platformObserver.observe(platform);
+		platform.classList.remove('broken');
+	}
 }
 
 function startGame() {
