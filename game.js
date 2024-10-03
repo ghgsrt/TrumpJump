@@ -264,7 +264,25 @@ const inputStack = [];
 
 const mobileLeft = document.getElementById('mobile-left');
 const mobileRight = document.getElementById('mobile-right');
-mobileLeft.addEventListener('pointerdown', () => {
+
+const ignore = (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+};
+mobileLeft.addEventListener('touchstart', ignore);
+mobileLeft.addEventListener('touchend', ignore);
+mobileLeft.addEventListener('touchmove', ignore);
+mobileLeft.addEventListener('touchcancel', ignore);
+
+mobileRight.addEventListener('touchstart', ignore);
+mobileRight.addEventListener('touchend', ignore);
+mobileRight.addEventListener('touchmove', ignore);
+mobileRight.addEventListener('touchcancel', ignore);
+
+mobileLeft.addEventListener('pointerdown', (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+
 	if (inputStack.includes('a')) return;
 
 	jump();
@@ -272,12 +290,18 @@ mobileLeft.addEventListener('pointerdown', () => {
 	inputStack.push('a');
 	inputActions['a']();
 });
-mobileLeft.addEventListener('pointerup', () => {
+mobileLeft.addEventListener('pointerup', (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+
 	inputStack.splice(inputStack.indexOf('a'), 1);
 	if (inputStack.length > 0) inputActions[inputStack[inputStack.length - 1]]();
 	else stopMoving();
 });
-mobileRight.addEventListener('pointerdown', () => {
+mobileRight.addEventListener('pointerdown', (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+
 	if (inputStack.includes('d')) return;
 
 	jump();
@@ -285,7 +309,10 @@ mobileRight.addEventListener('pointerdown', () => {
 	inputStack.push('d');
 	inputActions['d']();
 });
-mobileRight.addEventListener('pointerup', () => {
+mobileRight.addEventListener('pointerup', (e) => {
+	e.preventDefault();
+	e.stopPropagation();
+
 	inputStack.splice(inputStack.indexOf('d'), 1);
 	if (inputStack.length > 0) inputActions[inputStack[inputStack.length - 1]]();
 	else stopMoving();
