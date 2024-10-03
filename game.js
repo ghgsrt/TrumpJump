@@ -224,8 +224,11 @@ function updatePos(idx, offset, prevPos) {
 					// window.scrollTo(0, ROOT.scrollTop - (d - t));
 					window.scrollTo({
 						top: document.documentElement.scrollTop - (d - t),
+						behavior: 'smooth',
 					});
-					window.scrollTo(0, document.documentElement.scrollTop - (d - t));
+					window.scrollTo(0, document.documentElement.scrollTop - (d - t), {
+						behavior: 'smooth',
+					});
 				});
 			} else if (rect.top > document.documentElement.clientHeight) gameOver();
 		}
@@ -342,6 +345,7 @@ window.addEventListener('load', () => {
 	setTimeout(() => {
 		window.scrollTo({
 			top: document.body.scrollHeight,
+			behavior: 'smooth',
 		});
 		window.scrollTo(0, document.body.scrollHeight);
 		window.scrollTo(0, document.documentElement.scrollHeight);
@@ -388,5 +392,17 @@ function gameOver() {
 	MENU.classList.add('active');
 	window.scrollTo({
 		top: document.body.scrollHeight,
+		behavior: 'smooth',
 	});
 }
+
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+function disableIOSTextFieldZoom() {
+	if (!IS_IOS) return;
+
+	const element = document.querySelector('meta[name=viewport]');
+	let content = element.getAttribute('content');
+
+	element.setAttribute('content', content + ', maximum-scale=1.0');
+}
+disableIOSTextFieldZoom();
