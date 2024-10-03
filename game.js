@@ -13,35 +13,20 @@ PLAY.onclick = () => {
 	startGame();
 };
 
-let initial = true;
-let initial2 = true;
-let intersectingEntry = 0;
 const trumpObserver = new IntersectionObserver(
 	(entries) => {
-		// gotta love intersection observer firing for no reason
-		if (initial) {
-			initial = false;
-			return;
-		}
-		if (initial2) {
-			initial2 = false;
-			return;
-		}
-		if (!entries[intersectingEntry].isIntersecting) {
-			// console.log(entries[intersectingEntry].target.offsetLeft, bounds.width);
-			if (entries[intersectingEntry].target.offsetLeft < bounds.left) {
-				trumps = [trumps[2], trumps[0], trumps[1]];
-				pos[intersectingEntry] += bounds.width;
-			} else if (entries[intersectingEntry].target.offsetLeft > bounds.width) {
+		if (!entries[0].isIntersecting) {
+			if (trumps[1].offsetLeft < bounds.left) {
+				trumpObserver.unobserve(trumps[1]);
 				trumps = [trumps[1], trumps[2], trumps[0]];
+				pos[0] += bounds.width;
+				trumpObserver.observe(trumps[1]);
+			} else if (trumps[1].offsetLeft > bounds.width) {
+				trumpObserver.unobserve(trumps[1]);
+				trumps = [trumps[2], trumps[0], trumps[1]];
 				pos[0] -= bounds.width;
+				trumpObserver.observe(trumps[1]);
 			}
-		} else {
-			for (let i = 0; i < entries.length; i++)
-				if (entries[i].isIntersecting) {
-					intersectingEntry = i;
-					break;
-				}
 		}
 	},
 	{
@@ -50,18 +35,6 @@ const trumpObserver = new IntersectionObserver(
 		rootMargin: '100% 0px 100% 0px',
 	}
 );
-trumpObserver.observe(trumps[0]);
-
-// const deathObserver = new IntersectionObserver(
-// 	(entries) => {
-// 		if (!entries[0].isIntersecting) gameOver();
-// 	},
-// 	{
-// 		root: null,
-// 		threshold: 0,
-// 	}
-// );
-// deathObserver.observe(trumps[0]);
 
 const bounds = SPACE.getBoundingClientRect();
 
@@ -204,7 +177,7 @@ const tryAccelY = clamp(-MAX_VELOCITY_Y, MAX_VELOCITY_Y);
 function updatePos(idx, offset, prevPos) {
 	offset ??= 0;
 	prevPos ??= [pos[0] - offset, pos[1]];
-	if (idx === 0) {
+	if (idx === 1) {
 		pos[0] = tryMoveX(pos[0] + velocity[0]);
 		pos[1] = tryMoveY(pos[1] + velocity[1]);
 	}
@@ -233,7 +206,7 @@ function updatePos(idx, offset, prevPos) {
 			}
 		}
 
-	if (idx === 0) {
+	if (idx === 1) {
 		if (pos[1] === bounds.bottom - trumpDims[1]) {
 			velocity[1] = 0;
 		}
@@ -280,9 +253,6 @@ const inputActions = {
 	d: moveRight,
 };
 const inputStack = [];
-// function useInputs() {
-// 	inputChannel
-// }
 
 const mobileLeft = document.getElementById('mobile-left');
 const mobileRight = document.getElementById('mobile-right');
@@ -340,13 +310,9 @@ window.addEventListener('keyup', (e) => {
 
 function render() {
 	const _render = () => {
-		let prevPos = updatePos(0);
-		updatePos(1, bounds.width, prevPos);
+		let prevPos = updatePos(1);
+		updatePos(0, bounds.width, prevPos);
 		updatePos(2, -bounds.width, prevPos);
-
-		// console.log(velocity);
-		// console.log(acceleration);
-		// console.log(inputStack);
 
 		requestAnimationFrame(_render);
 	};
@@ -366,8 +332,7 @@ window.addEventListener('load', () => {
 	SPACE.appendChild(newTrump2);
 	trumps.push(newTrump2);
 
-	trumpObserver.observe(newTrump);
-	trumpObserver.observe(newTrump2);
+	trumpObserver.observe(trumps[1]);
 
 	setTimeout(() => {
 		window.scrollTo({
